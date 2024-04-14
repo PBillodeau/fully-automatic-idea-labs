@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
     <!-- CSS stylesheets -->
-    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -27,8 +27,11 @@
                 are dedicated to providing you with the latest trends, insights, and resources that will help you stay
                 ahead in today's fast-paced world. Explore our website to discover new perspectives and strategies to
                 enhance your business or personal life.</p>
+        </section>
 
-                <div id="index"></div>
+        <section id="articles" class="container">
+            <h2>Articles</h2>
+            <div id="index"></div>
         </section>
 
         <!-- About section -->
@@ -52,10 +55,10 @@
         <section id="services" class="container">
             <h2>Our Services</h2>
             <ul class="list-unstyled">
-                <li><a href="#"><i class="fas fa-rocket"></i> Ideation Workshops</a></li>
-                <li><a href="#"><i class="fas fa-lightbulb"></i> Innovative Consulting</a></li>
-                <li><a href="#"><i class="fas fa-tools"></i> Strategic Planning</a></li>
-                <li><a href="#"><i class="fas fa-user-cog"></i> Personal Development</a></li>
+                <li><i class="fas fa-rocket"></i> Ideation Workshops</li>
+                <li><i class="fas fa-lightbulb"></i> Innovative Consulting</li>
+                <li><i class="fas fa-tools"></i> Strategic Planning</li>
+                <li><i class="fas fa-user-cog"></i> Personal Development</li>
             </ul>
         </section>
 
@@ -77,7 +80,8 @@
             let htmlString = '<ul>';
 
             for (let file of data) {
-            htmlString += `<li><a href="${file.path}">${file.name}</a></li>`;
+                if (file.name === 'index.html') { break; }
+                htmlString += `<li><a href="/${file.name}">${file.name.split('.')[0].replace(/-/g, ' ')}</a></li>`;
             }
 
             htmlString += '</ul>';
