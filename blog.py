@@ -22,7 +22,7 @@ def create_content(prompt):
 
     print("Writing article...")
     with open('./articles/' + '-'.join(prompt.split()).lower() + '.html', 'w') as outfile:
-        outfile.write('<pre class="container" style="white-space: break-spaces;">' + ''.join(response) + '</pre>')
+        outfile.write('<pre class="container" style="white-space: break-spaces;">' + ''.join(response).strip() + '</pre>')
 
 def build_page(prompt):
     print("Building page...")
