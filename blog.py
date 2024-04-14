@@ -1,8 +1,6 @@
 from gpt4all import GPT4All
 import subprocess
 
-model = GPT4All("mistral-7b-openorca.gguf2.Q4_0.gguf", device='gpu')
-
 config = dict(
     max_tokens=800, # (int, default: 200 ) – The maximum number of tokens to generate.
     temp=0.7, # (float, default: 0.7 ) – The model temperature. Larger values increase creativity but decrease factuality.
@@ -16,21 +14,42 @@ config = dict(
     streaming=True # (bool, default: False ) – If True, this method will instead return a generator that yields tokens as the model generates them.
 )
 
-with model.chat_session():
-    prompt = input("Title: ")
-    response = model.generate(prompt="You are a brilliant tech leader with over 40 years of experience. Create a blog post for Fully Automatic Idea Labs with the title: " + prompt, **config)
+def create_content(prompt):
+    model = GPT4All("mistral-7b-openorca.gguf2.Q4_0.gguf", device='gpu')
 
+    with model.chat_session():
+        response = model.generate(prompt="You are a brilliant tech leader with over 40 years of experience. Create a blog post with the title: " + prompt, **config)
+
+    print("Writing article...")
+    with open('./articles/' + '-'.join(prompt.split()).lower() + '.html', 'w') as outfile:
+        outfile.write('<pre class="container" style="white-space: break-spaces;">' + ''.join(response) + '</pre>')
+
+def build_page(prompt):
+    print("Building page...")
     with open('./docs/' + '-'.join(prompt.split()).lower() + '.html', 'w') as outfile:
         with open('./templates/header.html', 'r') as header:
             for line in header:
                 outfile.write(line)
 
-        outfile.write('<pre>' + ''.join(response) + '</pre>')
+        with open('./articles/' + '-'.join(prompt.split()).lower() + '.html', 'r') as content:
+            for line in content:
+                outfile.write(line)
 
         with open('./templates/footer.html', 'r') as footer:
             for line in footer:
                 outfile.write(line)
 
+def deploy(message):
+    print("Deploying...")
     subprocess.run(["git", "add", "."])
-    subprocess.run(["git", "commit", "-m", "Create " + prompt])
+    subprocess.run(["git", "commit", "-m", message])
     subprocess.run(["git", "push", "origin", "master"])
+
+def main():
+    prompt = input("Title: ")
+    create_content(prompt)
+    build_page(prompt)
+    deploy("Create " + prompt)
+
+if __name__ == "__main__":
+    main()
