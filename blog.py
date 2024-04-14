@@ -18,11 +18,11 @@ config = dict(
 
 with model.chat_session():
     prompt = input("Title: ")
-    response = model.generate(prompt=prompt, **config)
+    response = model.generate(prompt="You are a brilliant tech leader with over 40 years of experience. Create a blog post for Fully Automatic Idea Labs with the title: " + prompt, **config)
 
     with open('./docs/' + '-'.join(prompt.split()) + '.html', 'w') as outfile:
         outfile.write(''.join(response))
 
     subprocess.run(["git", "add", "."])
-    subprocess.run(["git", "commit" "-m", "Create " + prompt])
+    subprocess.run(["git", "commit", "-m", "Create " + prompt])
     subprocess.run(["git", "push", "origin", "master"])
