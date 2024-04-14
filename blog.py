@@ -20,8 +20,16 @@ with model.chat_session():
     prompt = input("Title: ")
     response = model.generate(prompt="You are a brilliant tech leader with over 40 years of experience. Create a blog post for Fully Automatic Idea Labs with the title: " + prompt, **config)
 
-    with open('./docs/' + '-'.join(prompt.split()) + '.html', 'w') as outfile:
-        outfile.write(''.join(response))
+    with open('./docs/' + '-'.join(prompt.split()).lower() + '.html', 'w') as outfile:
+        with open('./templates/header.html', 'r') as header:
+            for line in header:
+                outfile.write(line)
+
+        outfile.write('<pre>' + ''.join(response) + '</pre>')
+
+        with open('./templates/footer.html', 'r') as footer:
+            for line in footer:
+                outfile.write(line)
 
     subprocess.run(["git", "add", "."])
     subprocess.run(["git", "commit", "-m", "Create " + prompt])
