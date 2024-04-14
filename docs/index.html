@@ -37,7 +37,7 @@
             let htmlString = '<ul>';
 
             for (let file of data) {
-                if (file.name === 'index.html') { break; }
+                if (file.name === 'index.html') { continue; }
                 htmlString += `<li><a href="/fully-automatic-idea-labs/${file.name}">${file.name.split('.')[0].replace(/-/g, ' ')}</a></li>`;
             }
 
